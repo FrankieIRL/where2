@@ -60,12 +60,13 @@ function ws () {
 	venueType[i]+'.png', optionsMobile, function(err) { 
 		if (!err) {
 			console.log('Screenshot taken!');
-			ts();
 		}
 	})
 };
 
-
+// this runs both the webshot and ocr
+// the ocr only wiorks here bc it is part of the if !err clause in the above function
+// it does not end the process. No matter where I put process.exit(0) there is a problem
 for (let i = 0; i < venueType.length; i++) {
 	webshot('https://www.google.ie/search?q='+venueType[i]+'+dublin', 
 	venueType[i]+'.png', optionsMobile, function(err) { 
@@ -73,7 +74,7 @@ for (let i = 0; i < venueType.length; i++) {
 			console.log('Screenshot taken!');
 	Tesseract.recognize(venueType[i]+'.png')
     .then(function (result) {fs.writeFileSync(venueType[i]+'.txt', result.text, function(err) {
-		if (err) {
+		if (!err) {
 		    console.log(err);
 		} else {
 		    console.log("file written successfully"); // it does not console.log this for some reason
